@@ -1,4 +1,4 @@
--- Made By Espresso & Lua_U
+-- Espresso and Lua_U
 
 local Converted = {
 	["_Internal"] = Instance.new("ScreenGui");
@@ -48,6 +48,8 @@ local Converted = {
 	["_topbar1"] = Instance.new("Frame");
 	["_TextLabel4"] = Instance.new("TextLabel");
 	["_ImageButton2"] = Instance.new("ImageButton");
+	["_Dragify1"] = Instance.new("LocalScript");
+	["_LocalScript5"] = Instance.new("LocalScript");
 }
 
 -- Properties:
@@ -472,7 +474,7 @@ local fake_module_scripts = {}
 
 -- Fake Local Scripts:
 
-local function PBHHHC_fake_script() -- Fake Script: StarterGui.Internal.overlay.MainWindow.Execute.LocalScript
+local function ZCUPZ_fake_script() -- Fake Script: StarterGui.Internal.overlay.MainWindow.Execute.LocalScript
     local script = Instance.new("LocalScript")
     script.Name = "LocalScript"
     script.Parent = Converted["_Execute"]
@@ -492,7 +494,7 @@ local function PBHHHC_fake_script() -- Fake Script: StarterGui.Internal.overlay.
 		assert(loadstring(textbox.Text))()
 	end)
 end
-local function QEPNS_fake_script() -- Fake Script: StarterGui.Internal.overlay.MainWindow.Clear.LocalScript
+local function DCYPA_fake_script() -- Fake Script: StarterGui.Internal.overlay.MainWindow.Clear.LocalScript
     local script = Instance.new("LocalScript")
     script.Name = "LocalScript"
     script.Parent = Converted["_Clear"]
@@ -512,7 +514,7 @@ local function QEPNS_fake_script() -- Fake Script: StarterGui.Internal.overlay.M
 		textbox.Text = ""
 	end)
 end
-local function TQDLU_fake_script() -- Fake Script: StarterGui.Internal.overlay.MainWindow.TextBox.Source.LocalScript
+local function QMDSY_fake_script() -- Fake Script: StarterGui.Internal.overlay.MainWindow.TextBox.Source.LocalScript
     local script = Instance.new("LocalScript")
     script.Name = "LocalScript"
     script.Parent = Converted["_Source"]
@@ -529,7 +531,7 @@ local function TQDLU_fake_script() -- Fake Script: StarterGui.Internal.overlay.M
 		script.Parent.Parent.SourceText.Value = script.Parent.Text
 	end)
 end
-local function OJFUSAS_fake_script() -- Fake Script: StarterGui.Internal.overlay.MainWindow.TextBox.Main
+local function BLTN_fake_script() -- Fake Script: StarterGui.Internal.overlay.MainWindow.TextBox.Main
     local script = Instance.new("LocalScript")
     script.Name = "Main"
     script.Parent = Converted["_TextBox"]
@@ -1195,7 +1197,7 @@ local function OJFUSAS_fake_script() -- Fake Script: StarterGui.Internal.overlay
 		end)
 	end
 end
-local function XGZVGB_fake_script() -- Fake Script: StarterGui.Internal.overlay.MainWindow.Dragify
+local function QAGBB_fake_script() -- Fake Script: StarterGui.Internal.overlay.MainWindow.Dragify
     local script = Instance.new("LocalScript")
     script.Name = "Dragify"
     script.Parent = Converted["_MainWindow"]
@@ -1246,7 +1248,7 @@ local function XGZVGB_fake_script() -- Fake Script: StarterGui.Internal.overlay.
 	dragify(script.Parent)
 	
 end
-local function JFCHLV_fake_script() -- Fake Script: StarterGui.Internal.overlay.Console.holder.LocalScript
+local function FSTR_fake_script() -- Fake Script: StarterGui.Internal.overlay.Console.holder.LocalScript
     local script = Instance.new("LocalScript")
     script.Name = "LocalScript"
     script.Parent = Converted["_holder"]
@@ -1286,7 +1288,7 @@ local function JFCHLV_fake_script() -- Fake Script: StarterGui.Internal.overlay.
 		olderror(...)
 	end
 end
-local function CULQVK_fake_script() -- Fake Script: StarterGui.Internal.overlay.Console.ImageButton.LocalScript
+local function QCPVI_fake_script() -- Fake Script: StarterGui.Internal.overlay.Console.ImageButton.LocalScript
     local script = Instance.new("LocalScript")
     script.Name = "LocalScript"
     script.Parent = Converted["_ImageButton1"]
@@ -1307,11 +1309,94 @@ local function CULQVK_fake_script() -- Fake Script: StarterGui.Internal.overlay.
 		end
 	end
 end
+local function NFQRXT_fake_script() -- Fake Script: StarterGui.Internal.overlay.Console.Dragify
+    local script = Instance.new("LocalScript")
+    script.Name = "Dragify"
+    script.Parent = Converted["_Console"]
+    local req = require
+    local require = function(obj)
+        local fake = fake_module_scripts[obj]
+        if fake then
+            return fake()
+        end
+        return req(obj)
+    end
 
-coroutine.wrap(PBHHHC_fake_script)()
-coroutine.wrap(QEPNS_fake_script)()
-coroutine.wrap(TQDLU_fake_script)()
-coroutine.wrap(OJFUSAS_fake_script)()
-coroutine.wrap(XGZVGB_fake_script)()
-coroutine.wrap(JFCHLV_fake_script)()
-coroutine.wrap(CULQVK_fake_script)()
+	local UIS = game:GetService("UserInputService")
+	function dragify(Frame)
+		dragToggle = nil
+		dragSpeed = 0.15
+		dragInput = nil
+		dragStart = nil
+		dragPos = nil
+		function updateInput(input)
+			Delta = input.Position - dragStart
+			Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + Delta.X, startPos.Y.Scale, startPos.Y.Offset + Delta.Y)
+			game:GetService("TweenService"):Create(Frame, TweenInfo.new(0.15), {Position = Position}):Play()
+		end
+		Frame.InputBegan:Connect(function(input)
+			if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) and UIS:GetFocusedTextBox() == nil then
+				dragToggle = true
+				dragStart = input.Position
+				startPos = Frame.Position
+				input.Changed:Connect(function()
+					if input.UserInputState == Enum.UserInputState.End then
+						dragToggle = false
+					end
+				end)
+			end
+		end)
+		Frame.InputChanged:Connect(function(input)
+			if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+				dragInput = input
+			end
+		end)
+		game:GetService("UserInputService").InputChanged:Connect(function(input)
+			if input == dragInput and dragToggle then
+				updateInput(input)
+			end
+		end)
+	end
+	dragify(script.Parent)
+	
+end
+local function PVFSFHE_fake_script() -- Fake Script: StarterGui.Internal.overlay.LocalScript
+    local script = Instance.new("LocalScript")
+    script.Name = "LocalScript"
+    script.Parent = Converted["_overlay"]
+    local req = require
+    local require = function(obj)
+        local fake = fake_module_scripts[obj]
+        if fake then
+            return fake()
+        end
+        return req(obj)
+    end
+
+	local screening = script.Parent
+	local Opened = false
+	local main = script.Parent
+	local UserInputService = game:GetService("UserInputService")
+	
+	UserInputService.InputBegan:Connect(function(KeyCode)
+		if KeyCode.KeyCode == Enum.KeyCode.Insert then 
+			if Opened then
+				screening.Visible = true
+				Opened = false
+			else
+				screening.Visible = false
+				Opened = true
+			end
+		end
+	end)
+end
+
+coroutine.wrap(ZCUPZ_fake_script)()
+coroutine.wrap(DCYPA_fake_script)()
+coroutine.wrap(QMDSY_fake_script)()
+coroutine.wrap(BLTN_fake_script)()
+coroutine.wrap(QAGBB_fake_script)()
+coroutine.wrap(FSTR_fake_script)()
+coroutine.wrap(QCPVI_fake_script)()
+coroutine.wrap(NFQRXT_fake_script)()
+coroutine.wrap(PVFSFHE_fake_script)()
