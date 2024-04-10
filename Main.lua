@@ -1263,7 +1263,7 @@ local function FSTR_fake_script() -- Fake Script: StarterGui.Internal.overlay.Co
 
 	local holder = script.Parent
 	
-	local oldprint = print
+	local rconsoleprint = print
 	getgenv().print = function(...)
 		oldprint(...)
 		local prin = holder.output:Clone()
@@ -1271,7 +1271,7 @@ local function FSTR_fake_script() -- Fake Script: StarterGui.Internal.overlay.Co
 		prin.Parent = script.Parent.Out
 		prin.Visible = true
 	end
-	local oldwarn = warn
+	local rconsolewarn = warn
 	getgenv().warn = function(...)
 		oldwarn(...)
 		local prin = holder.warn:Clone()
@@ -1279,7 +1279,7 @@ local function FSTR_fake_script() -- Fake Script: StarterGui.Internal.overlay.Co
 		prin.Parent = script.Parent.Out
 		prin.Visible = true
 	end
-	local olderror = error
+	local rconsoleerrors = error
 	getgenv().error = function(...)
 		local prin = holder.error:Clone()
 		prin.TextLabel.Text = ...
